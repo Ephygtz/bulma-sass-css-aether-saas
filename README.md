@@ -97,5 +97,50 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Node.js](https://nodejs.org/)
 - [npm](https://www.npmjs.com/)
 
+## How to Remove/Hide the Trailing `.html` in URLs
+
+To make your URLs cleaner (e.g., `/about` instead of `/about.html`), you can use one of the following approaches depending on your hosting environment:
+
+### 1. **Using `.htaccess` (Apache)**
+
+Add the following to your `.htaccess` file in the root directory:
+
+```apache
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^/]+)$ $1.html [L]
+```
+
+This will allow you to access `about.html` via `/about`.
+
+### 2. **Using `netlify.toml` (Netlify)**
+
+Add a rewrite rule to your `netlify.toml`:
+
+```toml
+[[redirects]]
+  from = "/:page"
+  to = "/:page.html"
+  status = 200
+```
+
+### 3. **Using `nginx`**
+
+Add a location block to your server config:
+
+```nginx
+location / {
+    try_files $uri $uri.html $uri/ =404;
+}
+```
+
+### 4. **Client-side Routing (Single Page Apps)**
+
+If you use a client-side router (React, Vue, etc.), configure your router to handle clean URLs and serve the correct content.
+
+---
+
+Choose the method that matches your deployment environment. For static hosting, `.htaccess` or Netlify rewrites are most common.
+
 ---
 Feel free to customize this README to better fit your project's specifics.
